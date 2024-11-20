@@ -3,7 +3,7 @@
 
    ```bash
   Nombres:
-    Cristian Paredes
+      Cristian Paredes
  	  Scarlett Luna
 	  David Vela
 ```
