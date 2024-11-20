@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      ¡Bienvenido a PokeApp!
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">PokeApp</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <img src="assets/images/pokemon-logo.png" alt="Pokémon Logo" class="logo">
+    <strong>¿Listo para explorar el mundo Pokémon?</strong>
+    <p>Busca tus Pokémon favoritos o revisa los que has guardado en tu lista de favoritos.</p>
+
+    <div class="button-group">
+      <ion-button expand="block" routerLink="/pokemon-list" color="secondary">
+        Buscar Pokémon
+      </ion-button>
+      <ion-button expand="block" routerLink="/favorites" color="tertiary">
+        Ver Favoritos
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

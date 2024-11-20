@@ -1,0 +1,144 @@
+<ion-header>
+  <ion-toolbar color="tertiary" class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon name="menu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title class="header-title">Pokemon API</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="pokemon-container">
+  <!-- Barra de búsqueda -->
+  <div class="searchbar-container">
+    <ion-searchbar
+      [(ngModel)]="searchQuery"
+      (ionInput)="searchPokemon()"
+      debounce="500"
+      placeholder="Busca un Pokémon"
+      class="custom-searchbar"
+    >
+    </ion-searchbar>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error-message">
+    <ion-text color="danger">{{ errorMessage }}</ion-text>
+  </div>
+
+  <!-- Lista de Pokémon cuando no se busca un específico -->
+  <div *ngIf="!pokemonDetails && filteredPokemons.length" class="pokemon-grid">
+    <div
+      *ngFor="let pokemon of filteredPokemons"
+      class="pokemon-grid-item"
+      (click)="searchQuery = pokemon.name; searchPokemon()"
+    >
+      <img
+        [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + 
+        (filteredPokemons.indexOf(pokemon) + ((currentPage - 1) * pageSize) + 1) + '.png'"
+        alt="{{ pokemon.name }}"
+      />
+      <div class="pokemon-grid-name">
+        {{ pokemon.name | titlecase }}
+        <ion-icon
+          [name]="pokemon.isFavorite ? 'heart' : 'heart-outline'"
+          (click)="$event.stopPropagation(); toggleFavorite(pokemon)"
+          [color]="pokemon.isFavorite ? 'danger' : 'medium'"
+        ></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de cargar más Pokémon -->
+  <div
+    *ngIf="!pokemonDetails && filteredPokemons.length < totalPokemons"
+    class="load-more-container"
+  >
+    <ion-button expand="block" fill="clear" (click)="loadMorePokemons()">
+      Cargar más Pokémon
+    </ion-button>
+  </div>
+
+  <!-- Detalles del Pokémon -->
+  <div *ngIf="pokemonDetails" class="pokemon-detail-card">
+    <div class="pokemon-detail-header">
+      <ion-button fill="clear" (click)="pokemonDetails = null">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+      <h2 class="pokemon-name">
+        {{ pokemonDetails.name | titlecase }}
+        <ion-icon
+          [name]="pokemonDetails.isFavorite ? 'heart' : 'heart-outline'"
+          (click)="toggleFavorite(pokemonDetails)"
+          [color]="pokemonDetails.isFavorite ? 'danger' : 'medium'"
+        ></ion-icon>
+      </h2>
+    </div>
+
+    <div class="pokemon-image-container">
+      <img
+        [src]="pokemonDetails.sprites.other['official-artwork'].front_default"
+        alt="{{ pokemonDetails.name }}"
+        class="pokemon-image"
+      />
+    </div>
+
+    <div class="pokemon-info">
+      <div class="pokemon-types">
+        <span
+          *ngFor="let type of pokemonDetails.types"
+          class="type-badge"
+          [ngClass]="type.type.name"
+        >
+          {{ type.type.name | titlecase }}
+        </span>
+      </div>
+
+      <div class="pokemon-stats">
+        <div class="stat-grid">
+          <div class="stat-item">
+            <ion-icon name="resize"></ion-icon>
+            <span>Altura</span>
+            <p>{{ pokemonDetails.height / 10 }} m</p>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="scale"></ion-icon>
+            <span>Peso</span>
+            <p>{{ pokemonDetails.weight / 10 }} kg</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Estadísticas Base</h3>
+      <div class="base-stats">
+        <div *ngFor="let stat of pokemonDetails.stats" class="stat-bar">
+          <div class="stat-label">{{ stat.stat.name | titlecase }}</div>
+          <ion-progress-bar
+            [value]="stat.base_stat / 255"
+            [color]="getStatColor(stat.stat.name)"
+          >
+          </ion-progress-bar>
+          <div class="stat-value">{{ stat.base_stat }}</div>
+        </div>
+      </div>
+
+      <h3>Movimientos Principales</h3>
+      <div class="pokemon-moves">
+        <span
+          *ngFor="let move of pokemonDetails.moves.slice(0, 6)"
+          class="move-badge"
+        >
+          {{ move.move.name | titlecase }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <ion-spinner
+    *ngIf="loading"
+    name="dots"
+    class="loading-spinner"
+  ></ion-spinner>
+</ion-content>

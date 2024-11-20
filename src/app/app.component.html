@@ -1,0 +1,16 @@
+<ion-menu contentId="main-content" side="start">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Favoritos</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let pokemon of favorites" (click)="viewPokemon(pokemon)">
+        {{ pokemon.name | titlecase }}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-router-outlet id="main-content"></ion-router-outlet>
