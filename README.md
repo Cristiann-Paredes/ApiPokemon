@@ -1,9 +1,12 @@
 
 # Consumo de API's con ionic
 
-Nombres: Cristian Paredes
+   ```bash
+  Nombres:
+    Cristian Paredes
  	  Scarlett Luna
 	  David Vela
+```
 
 
 ## ⏬ Instalacion
